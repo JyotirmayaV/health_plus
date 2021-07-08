@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:Health_Plus/constants.dart';
-import 'package:Health_Plus/screens/details_screen.dart';
-import 'package:Health_Plus/widgets/bottom_nav_bar.dart';
-import 'package:Health_Plus/widgets/category_card.dart';
-import 'package:Health_Plus/widgets/search_bar.dart';
+import 'package:health_plus/constants.dart';
+import 'package:health_plus/screens/details_screen.dart';
+import 'package:health_plus/widgets/bottom_nav_bar.dart';
+import 'package:health_plus/widgets/category_card.dart';
+import 'package:health_plus/widgets/search_bar.dart';
 
 void main() => runApp(MyApp());
 
