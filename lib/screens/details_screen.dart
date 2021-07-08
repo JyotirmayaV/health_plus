@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:Health_Plus/constants.dart';
-import 'package:Health_Plus/widgets/bottom_nav_bar.dart';
-import 'package:Health_Plus/widgets/search_bar.dart';
+import 'package:health_plus/constants.dart';
+import 'package:health_plus/widgets/bottom_nav_bar.dart';
+import 'package:health_plus/widgets/search_bar.dart';
 
 class DetailsScreen extends StatelessWidget {
   @override
