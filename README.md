@@ -1,6 +1,6 @@
 # health_plus
 
-A new Flutter project.
+A new Flutter project for your daily day routine.
 
 ## Getting Started
 
