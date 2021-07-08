@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:Health_Plus/constants.dart';
 
 class ReusableCardChild extends StatelessWidget {
   final IconData childContainerIcon;
@@ -21,31 +22,9 @@ class ReusableCardChild extends StatelessWidget {
         ),
         Text(
           childContainerText,
-          style: TextStyle(
-            fontSize: 17.0,
-            color: Color(0xFF8D8E98),
-          ),
+          style: kBmiLabelTextStyle,
         ),
       ],
-    );
-  }
-}
-
-class ReusableCard extends StatelessWidget {
-  final Color containerColor;
-  final Widget cardChild;
-
-  ReusableCard({@required this.containerColor, this.cardChild});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: cardChild,
-      margin: EdgeInsets.all(15.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        color: containerColor,
-      ),
     );
   }
 }

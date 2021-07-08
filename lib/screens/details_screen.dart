@@ -187,17 +187,19 @@ class SeassionCard extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: <Widget>[
-                    Container(
-                      height: 42,
-                      width: 43,
-                      decoration: BoxDecoration(
-                        color: isDone ? kBlueColor : Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: kBlueColor),
-                      ),
-                      child: Icon(
-                        Icons.play_arrow,
-                        color: isDone ? Colors.white : kBlueColor,
+                    Expanded(
+                      child: Container(
+                        height: 50,
+                        width: 43,
+                        decoration: BoxDecoration(
+                          color: isDone ? kBlueColor : Colors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: kBlueColor),
+                        ),
+                        child: Icon(
+                          Icons.play_arrow,
+                          color: isDone ? Colors.white : kBlueColor,
+                        ),
                       ),
                     ),
                     SizedBox(width: 10),
