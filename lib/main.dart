@@ -1,5 +1,6 @@
 import 'package:Health_Plus/screens/bmi.dart';
 import 'package:Health_Plus/constants.dart';
+import 'package:Health_Plus/screens/covid_analyser.dart';
 import 'package:Health_Plus/screens/details_screen.dart';
 import 'package:Health_Plus/widgets/bottom_nav_bar.dart';
 import 'package:Health_Plus/widgets/category_card.dart';
@@ -117,6 +118,18 @@ class HomeScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(builder: (context) {
                                 return BMICalculator();
+                              }),
+                            );
+                          },
+                        ),
+                        CategoryCard(
+                          title: "COVID Analyser",
+                          svgSrc: "assets/icons/yoga.svg",
+                          press: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return COVIDanalyser();
                               }),
                             );
                           },
