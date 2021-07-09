@@ -1,4 +1,4 @@
-import 'package:Health_Plus/app%20modules/bmi_calculator/bmi.dart';
+import 'package:Health_Plus/screens/bmi.dart';
 import 'package:Health_Plus/constants.dart';
 import 'package:Health_Plus/screens/details_screen.dart';
 import 'package:Health_Plus/widgets/bottom_nav_bar.dart';
