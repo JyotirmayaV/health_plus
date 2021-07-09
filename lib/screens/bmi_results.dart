@@ -1,10 +1,16 @@
+import 'package:Health_Plus/functionalities/bmi_calculator/bmi_brain.dart';
 import 'package:Health_Plus/widgets/bmi_calculator/reusable_card.dart';
 import 'package:Health_Plus/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 class BMIResults extends StatelessWidget {
-  const BMIResults({key}) : super(key: key);
+  final String bmiResult;
+  final String bmi;
+  final String bmiAdvice;
+
+  BMIResults(
+      {@required this.bmiResult, @required this.bmi, @required this.bmiAdvice});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +44,7 @@ class BMIResults extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      'OVERWEIGHT',
+                      bmiResult,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0,
@@ -46,13 +52,13 @@ class BMIResults extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '26.7',
+                      bmi,
                       style: kBmiNumberTextStyle.copyWith(
                         fontSize: 60.0,
                       ),
                     ),
                     Text(
-                      'You have a higher than normal body weight. Try to exercise more.',
+                      bmiAdvice,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,

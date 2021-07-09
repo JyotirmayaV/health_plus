@@ -1,3 +1,4 @@
+import 'package:Health_Plus/functionalities/bmi_calculator/bmi_brain.dart';
 import 'package:Health_Plus/screens/bmi_results.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -142,6 +143,7 @@ class _BMICalculator extends State<BMICalculator> {
                               onPressed: () {
                                 setState(() {
                                   weight -= 1;
+                                  if (weight == 0) weight = 1;
                                 });
                               },
                             ),
@@ -184,6 +186,7 @@ class _BMICalculator extends State<BMICalculator> {
                               onPressed: () {
                                 setState(() {
                                   age -= 1;
+                                  if (age == 0) age = 1;
                                 });
                               },
                             ),
@@ -209,9 +212,15 @@ class _BMICalculator extends State<BMICalculator> {
           ),
           GestureDetector(
             onTap: () {
+              BMIMaths calc = BMIMaths(height: height, weight: weight);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => BMIResults()),
+                MaterialPageRoute(
+                    builder: (context) => BMIResults(
+                          bmi: calc.getCalculatedBMI(),
+                          bmiResult: calc.getResult(),
+                          bmiAdvice: calc.getAdvice(),
+                        )),
               );
             },
             child: Container(
