@@ -1,4 +1,5 @@
 import 'package:Health_Plus/constants.dart';
+import 'package:Health_Plus/functionalities/covid_analyser_brain.dart';
 import 'package:Health_Plus/widgets/bmi_calculator/icon_content.dart';
 import 'package:Health_Plus/widgets/bmi_calculator/reusable_card.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ const Color activeCardColor = kBmiActiveIconColor;
 const Color inactiveCardColor = kBmiBackgroundColor;
 
 int age = 20;
-bool privacy = true;
 
 Map<String, bool> majorSymptom = {
   'Weakness': false,
@@ -333,7 +333,18 @@ class _COVIDanalyserState extends State<COVIDanalyser> {
           ), //Final Question
           GestureDetector(
             onTap: () {
-              print('clicked on me');
+              setState(() {
+                COVIDanalyserBrain ob = COVIDanalyserBrain(
+                  majorSymptom: majorSymptom,
+                  majorDisease: majorDisease,
+                  selectedGender: selectedGender,
+                  selectedTemperature: selectedTemperature,
+                  selectedSymptoms: selectedForSymptoms,
+                  selectedHistory: selectedForTravel,
+                );
+
+                ob.selected();
+              });
             },
             child: Container(
               color: Colors.blue.shade500,
