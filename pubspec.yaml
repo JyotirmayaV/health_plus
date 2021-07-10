@@ -27,6 +27,7 @@ dependencies:
   flutter_svg: ^0.22.0
   font_awesome_flutter: ^9.1.0
   http: ^0.13.3
+  percent_indicator: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +70,12 @@ flutter:
           weight: 700
         - asset: assets/fonts/Cairo/Cairo-Black.ttf
           weight: 900
+    - family: Pacifico
+      fonts:
+        - asset: assets/fonts/Pacifico/Pacifico-Regular.ttf
+    - family: SourceSansPro
+      fonts:
+        - asset: assets/fonts/SourceSansPro/SourceSansPro-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
