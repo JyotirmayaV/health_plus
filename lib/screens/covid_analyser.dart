@@ -136,8 +136,8 @@ class _COVIDanalyserState extends State<COVIDanalyser> {
                 ),
                 Slider(
                   value: age.toDouble(),
-                  min: 5.0,
-                  max: 120.0,
+                  min: 10.0,
+                  max: 100.0,
                   onChanged: (double selectedAge) {
                     setState(() {
                       age = selectedAge.round();
@@ -341,6 +341,7 @@ class _COVIDanalyserState extends State<COVIDanalyser> {
                   selectedTemperature: selectedTemperature,
                   selectedSymptoms: selectedForSymptoms,
                   selectedHistory: selectedForTravel,
+                  age: age,
                 );
 
                 ob.selected();
