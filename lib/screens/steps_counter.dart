@@ -3,6 +3,7 @@ import 'package:Health_Plus/widgets/bmi_calculator/reusable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:pedometer/pedometer.dart';
 import 'dart:async';
 
 class StepsCounter extends StatefulWidget {
@@ -12,11 +13,16 @@ class StepsCounter extends StatefulWidget {
   _StepsCounterState createState() => _StepsCounterState();
 }
 
-int stepsWalked = 20;
 double caloriesBurnt = 12.0;
-int goalSteps = 10000;
+int goalSteps = 1000;
 double percentWalked = 0.10;
-Timer myTimer;
+int stepsWalked = 0;
+int holdSteps = 0;
+int extraSteps = 0;
+String walkingTime = "00:00:00";
+final duration = const Duration(seconds: 1);
+var myStopWatch = Stopwatch();
+Timer constantCaller;
 
 enum ButtonState {
   START,
@@ -31,34 +37,32 @@ enum StopButtonState {
 }
 StopButtonState stopButtonCurrentState = StopButtonState.STOP;
 
-String walkingTime = "00:00:00";
-final duration = const Duration(seconds: 1);
-var myStopWatch = Stopwatch();
-Timer constantCaller;
-
 class _StepsCounterState extends State<StepsCounter> {
   void startTimer() {
     myStopWatch.start();
     constantCaller = Timer.periodic(duration, (timer) {
-      startWalking();
-      print("here in timer");
+      updateWalkingTime();
+      //print("here in timer");
     });
   }
 
-  void startWalking() {
-    setState(() {
-      print("here in keep running");
-      walkingTime = myStopWatch.elapsed.inHours.toString().padLeft(2, "0") +
-          ":" +
-          (myStopWatch.elapsed.inMinutes % 60).toString().padLeft(2, "0") +
-          ":" +
-          (myStopWatch.elapsed.inSeconds % 60).toString().padLeft(2, "0");
-      print(walkingTime);
-    });
+  void updateWalkingTime() {
+    if (mounted) {
+      setState(() {
+        //print("here in keep running");
+        walkingTime = myStopWatch.elapsed.inHours.toString().padLeft(2, "0") +
+            ":" +
+            (myStopWatch.elapsed.inMinutes % 60).toString().padLeft(2, "0") +
+            ":" +
+            (myStopWatch.elapsed.inSeconds % 60).toString().padLeft(2, "0");
+        //print(walkingTime);
+      });
+    }
   }
 
   void pause() {
     print("here in fun pause");
+    holdSteps = steps;
     myStopWatch.stop();
     constantCaller.cancel();
   }
@@ -72,9 +76,103 @@ class _StepsCounterState extends State<StepsCounter> {
 
   void reset() {
     print("here in reset");
-    setState(() {
-      walkingTime = "00:00:00";
-    });
+    if (mounted) {
+      setState(() {
+        walkingTime = "00:00:00";
+        stepsWalked = 0;
+        holdSteps = 0;
+        extraSteps = 0;
+      });
+    }
+  }
+
+  Stream<StepCount> _stepCountStream;
+  Stream<PedestrianStatus> _pedestrianStatusStream;
+  String status = 'stopped';
+  int steps = 0;
+
+  void onStepCount(StepCount event) {
+    print("Pressed on step count");
+    print(event);
+    if (mounted) {
+      setState(() {
+        steps = event.steps;
+        print(buttonCurrentState);
+        if (buttonCurrentState == ButtonState.PAUSE) {
+          if (holdSteps == 0) {
+            print("inside if 1");
+            stepsWalked = 0;
+            holdSteps = steps;
+          } else if (extraSteps == 0) {
+            print("inside if 2");
+            stepsWalked = steps - holdSteps;
+          } else if (extraSteps != 0) {
+            holdSteps = steps - stepsWalked;
+            extraSteps = 0;
+          }
+        } else if (buttonCurrentState == ButtonState.RESUME) {
+          extraSteps = steps - holdSteps;
+          print('extrasteps: $extraSteps');
+        }
+      });
+    }
+    print('steps: $steps, holdsteps: $holdSteps, stepsWalked: $stepsWalked');
+  }
+
+  void onPedestrianStatusChanged(PedestrianStatus event) {
+    print("onPedestrianStatusChanged clicked");
+    print(event.status);
+    if (mounted) {
+      setState(() {
+        status = event.status;
+      });
+    }
+  }
+
+  void onPedestrianStatusError(error) {
+    print('onPedestrianStatusError: $error');
+    if (mounted) {
+      setState(() {
+        status = 'Pedestrian Status not available';
+      });
+    }
+    print(status);
+  }
+
+  void onStepCountError(error) {
+    print('onStepCountError: $error');
+    if (mounted) {
+      setState(() {
+        steps = 0;
+      });
+    }
+  }
+
+  void initPlatformState() {
+    _pedestrianStatusStream = Pedometer.pedestrianStatusStream;
+    _pedestrianStatusStream
+        .listen(onPedestrianStatusChanged)
+        .onError(onPedestrianStatusError);
+
+    _stepCountStream = Pedometer.stepCountStream;
+    _stepCountStream.listen(onStepCount).onError(onStepCountError);
+
+    if (!mounted) return;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initPlatformState();
+    if (buttonCurrentState == ButtonState.PAUSE) startTimer();
+    print("steps: $steps, status: $status, holdSteps: $holdSteps");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    constantCaller.cancel();
   }
 
   @override
@@ -94,7 +192,7 @@ class _StepsCounterState extends State<StepsCounter> {
               containerColor: kBmiActiveIconColor,
               cardChild: CircularPercentIndicator(
                 radius: 300.0,
-                percent: percentWalked,
+                percent: stepsWalked / goalSteps,
                 animation: true,
                 lineWidth: 15.0,
                 circularStrokeCap: CircularStrokeCap.round,
