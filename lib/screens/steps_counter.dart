@@ -3,6 +3,7 @@ import 'package:Health_Plus/widgets/bmi_calculator/reusable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'dart:async';
 
 class StepsCounter extends StatefulWidget {
   const StepsCounter({key}) : super(key: key);
@@ -11,20 +12,71 @@ class StepsCounter extends StatefulWidget {
   _StepsCounterState createState() => _StepsCounterState();
 }
 
-int stepsWalked = 10;
+int stepsWalked = 20;
 double caloriesBurnt = 12.0;
 int goalSteps = 10000;
 double percentWalked = 0.10;
+Timer myTimer;
 
 enum ButtonState {
   START,
   PAUSE,
   RESUME,
 }
-
 ButtonState buttonCurrentState = ButtonState.START;
 
+enum StopButtonState {
+  STOP,
+  RESET,
+}
+StopButtonState stopButtonCurrentState = StopButtonState.STOP;
+
+String walkingTime = "00:00:00";
+final duration = const Duration(seconds: 1);
+var myStopWatch = Stopwatch();
+Timer constantCaller;
+
 class _StepsCounterState extends State<StepsCounter> {
+  void startTimer() {
+    myStopWatch.start();
+    constantCaller = Timer.periodic(duration, (timer) {
+      startWalking();
+      print("here in timer");
+    });
+  }
+
+  void startWalking() {
+    setState(() {
+      print("here in keep running");
+      walkingTime = myStopWatch.elapsed.inHours.toString().padLeft(2, "0") +
+          ":" +
+          (myStopWatch.elapsed.inMinutes % 60).toString().padLeft(2, "0") +
+          ":" +
+          (myStopWatch.elapsed.inSeconds % 60).toString().padLeft(2, "0");
+      print(walkingTime);
+    });
+  }
+
+  void pause() {
+    print("here in fun pause");
+    myStopWatch.stop();
+    constantCaller.cancel();
+  }
+
+  void stop() {
+    print("here in stop");
+    myStopWatch.stop();
+    myStopWatch.reset();
+    constantCaller.cancel();
+  }
+
+  void reset() {
+    print("here in reset");
+    setState(() {
+      walkingTime = "00:00:00";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,19 +164,30 @@ class _StepsCounterState extends State<StepsCounter> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Expanded(
+                      //START Button
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            if (buttonCurrentState != ButtonState.PAUSE) {
-                              buttonCurrentState = ButtonState.PAUSE;
-                            } else if (buttonCurrentState ==
-                                ButtonState.PAUSE) {
-                              buttonCurrentState = ButtonState.RESUME;
+                            if (stopButtonCurrentState ==
+                                StopButtonState.STOP) {
+                              if (buttonCurrentState != ButtonState.PAUSE) {
+                                //user clicked on START or RESUME button
+                                startTimer();
+                                buttonCurrentState = ButtonState.PAUSE;
+                              } else if (buttonCurrentState ==
+                                  ButtonState.PAUSE) {
+                                //User clicked on PAUSE button
+                                pause();
+                                buttonCurrentState = ButtonState.RESUME;
+                              }
                             }
                           });
                         },
                         child: ReusableCard(
-                          containerColor: kBmiActiveIconColor,
+                          containerColor:
+                              stopButtonCurrentState == StopButtonState.STOP
+                                  ? kBmiActiveIconColor
+                                  : kBmiBackgroundColor,
                           cardChild: Center(
                             child: Text(
                               buttonCurrentState.toString().split('.').last,
@@ -140,22 +203,34 @@ class _StepsCounterState extends State<StepsCounter> {
                       ),
                     ),
                     Expanded(
+                      //STOP Button
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            if (buttonCurrentState != ButtonState.START) {
+                            if (stopButtonCurrentState ==
+                                StopButtonState.RESET) {
+                              //User clicked on RESET Button
+                              reset();
+                              stopButtonCurrentState = StopButtonState.STOP;
+                            } else if (stopButtonCurrentState ==
+                                StopButtonState.STOP) {
+                              //User clciked on STOP button
+                              stop();
+                              stopButtonCurrentState = StopButtonState.RESET;
                               buttonCurrentState = ButtonState.START;
                             }
                           });
                         },
                         child: ReusableCard(
                           containerColor:
-                              buttonCurrentState == ButtonState.START
+                              ((buttonCurrentState == ButtonState.START) &&
+                                      (stopButtonCurrentState ==
+                                          StopButtonState.STOP))
                                   ? kBmiBackgroundColor
                                   : kBmiActiveIconColor,
                           cardChild: Center(
                             child: Text(
-                              'STOP',
+                              stopButtonCurrentState.toString().split('.').last,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.0,
@@ -188,7 +263,7 @@ class _StepsCounterState extends State<StepsCounter> {
                           height: 10.0,
                         ),
                         Text(
-                          '00:00:00',
+                          walkingTime.toString(),
                           style: TextStyle(
                             fontFamily: 'SourceSansPro',
                             fontWeight: FontWeight.bold,
