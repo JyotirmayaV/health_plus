@@ -101,11 +101,11 @@ class _StepsCounterState extends State<StepsCounter> {
         if (buttonCurrentState == ButtonState.PAUSE) {
           if (holdSteps == 0) {
             print("inside if 1");
-            stepsWalked = 0;
+            stepsWalked = 1;
             holdSteps = steps;
           } else if (extraSteps == 0) {
             print("inside if 2");
-            stepsWalked = steps - holdSteps;
+            stepsWalked = steps - holdSteps + 1;
           } else if (extraSteps != 0) {
             holdSteps = steps - stepsWalked;
             extraSteps = 0;
@@ -229,6 +229,7 @@ class _StepsCounterState extends State<StepsCounter> {
                   cardChild: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
                           'Calories Burnt',
@@ -347,6 +348,7 @@ class _StepsCounterState extends State<StepsCounter> {
                   cardChild: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
                           'Walking Time',
