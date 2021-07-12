@@ -172,7 +172,7 @@ class _StepsCounterState extends State<StepsCounter> {
   @override
   void dispose() {
     super.dispose();
-    constantCaller.cancel();
+    if (constantCaller.isActive) constantCaller.cancel();
   }
 
   @override
