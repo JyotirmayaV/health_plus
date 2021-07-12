@@ -1,7 +1,13 @@
-import 'package:Health_Plus/screens/home_screen.dart';
+import 'package:Health_Plus/screens/login_screen.dart';
+import 'package:Health_Plus/screens/registration_screen.dart';
+import 'package:Health_Plus/widgets/rounded_button.dart';
 import 'package:flutter/material.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
+import '';
 
 class WelcomeScreen extends StatefulWidget {
+  static const String id = "welcome_screen";
+
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -19,62 +25,46 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Container(
-                  child: Image.asset('images/logo.png'),
-                  height: 60.0,
-                ),
-                Text(
-                  'Health Plus',
-                  style: TextStyle(
-                    fontSize: 35.0,
-                    fontWeight: FontWeight.w900,
+                Hero(
+                  tag: 'animateLogo',
+                  child: Container(
+                    child: Image.asset('images/logo.png'),
+                    height: 60.0,
                   ),
+                ),
+                AnimatedTextKit(
+                  animatedTexts: [
+                    TypewriterAnimatedText(
+                      'Health Plus',
+                      textStyle: const TextStyle(
+                        fontSize: 35.0,
+                        fontWeight: FontWeight.w900,
+                      ),
+                      speed: const Duration(milliseconds: 500),
+                    )
+                  ],
+                  isRepeatingAnimation: true,
+                  repeatForever: true,
+                  pause: const Duration(microseconds: 500),
                 ),
               ],
             ),
             SizedBox(
               height: 48.0,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                elevation: 5.0,
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return HomeScreen();
-                      }),
-                    );
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'Log In',
-                  ),
-                ),
-              ),
+            RoundedButton(
+              buttonColor: Colors.lightBlueAccent,
+              buttonText: 'Log In',
+              onPress: () {
+                Navigator.pushNamed(context, LoginScreen.id);
+              },
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () {
-                    //Go to registration screen.
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'Register',
-                  ),
-                ),
-              ),
+            RoundedButton(
+              buttonColor: Colors.blue,
+              buttonText: 'Register',
+              onPress: () {
+                Navigator.pushNamed(context, RegistrationScreen.id);
+              },
             ),
           ],
         ),

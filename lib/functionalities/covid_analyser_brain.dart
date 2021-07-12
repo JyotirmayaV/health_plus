@@ -2,7 +2,7 @@ import 'package:Health_Plus/screens/covid_analyser.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-List<int> data_entered = [];
+List<int> dataEntered = [];
 
 class COVIDanalyserBrain {
   final Map<String, bool> majorSymptom;
@@ -24,54 +24,54 @@ class COVIDanalyserBrain {
   });
 
   void selected() {
-    data_entered = [];
+    dataEntered = [];
 
-    data_entered.add(selectedGender == Gender.male ? 0 : 1);
+    dataEntered.add(selectedGender == Gender.male ? 0 : 1);
 
-    data_entered.add(majorSymptom['Drowsiness'] ? 1 : 0);
+    dataEntered.add(majorSymptom['Drowsiness'] ? 1 : 0);
 
-    data_entered.add(majorSymptom['Sore Throat'] ? 1 : 0);
+    dataEntered.add(majorSymptom['Sore Throat'] ? 1 : 0);
 
-    data_entered.add(majorSymptom['Weakness'] ? 1 : 0);
+    dataEntered.add(majorSymptom['Weakness'] ? 1 : 0);
 
-    data_entered.add(majorSymptom['Breathing Problems'] ? 1 : 0);
+    dataEntered.add(majorSymptom['Breathing Problems'] ? 1 : 0);
 
-    data_entered.add(majorSymptom['Drowsiness'] ? 1 : 0);
+    dataEntered.add(majorSymptom['Drowsiness'] ? 1 : 0);
 
-    data_entered.add(majorSymptom['Pain in Chest'] ? 1 : 0);
+    dataEntered.add(majorSymptom['Pain in Chest'] ? 1 : 0);
 
-    data_entered.add(selectedHistory == TravelHistory.yes ? 1 : 0);
+    dataEntered.add(selectedHistory == TravelHistory.yes ? 1 : 0);
 
-    data_entered.add(majorDisease['Diabetes'] ? 1 : 0);
+    dataEntered.add(majorDisease['Diabetes'] ? 1 : 0);
 
-    data_entered.add(majorDisease['Heart Disease'] ? 1 : 0);
+    dataEntered.add(majorDisease['Heart Disease'] ? 1 : 0);
 
-    data_entered.add(majorDisease['Lung Disease'] ? 1 : 0);
+    dataEntered.add(majorDisease['Lung Disease'] ? 1 : 0);
 
-    data_entered.add(majorDisease['Stroke or Reduced Immunity'] ? 1 : 0);
+    dataEntered.add(majorDisease['Stroke or Reduced Immunity'] ? 1 : 0);
 
-    data_entered.add(selectedSymptoms == SymptomsProgressed.yes ? 1 : 0);
+    dataEntered.add(selectedSymptoms == SymptomsProgressed.yes ? 1 : 0);
 
-    data_entered.add(majorDisease['High Blood Pressure'] ? 1 : 0);
+    dataEntered.add(majorDisease['High Blood Pressure'] ? 1 : 0);
 
-    data_entered.add(majorDisease['Kidney Disease'] ? 1 : 0);
+    dataEntered.add(majorDisease['Kidney Disease'] ? 1 : 0);
 
-    data_entered.add(majorSymptom['Change in Appetide'] ? 1 : 0);
+    dataEntered.add(majorSymptom['Change in Appetide'] ? 1 : 0);
 
-    data_entered.add(majorSymptom['Loss of Sense of Smell'] ? 1 : 0);
+    dataEntered.add(majorSymptom['Loss of Sense of Smell'] ? 1 : 0);
 
     for (int i = 10; i < 100; i += 10) {
       if (age >= i && age < i + 10)
-        data_entered.add(1);
+        dataEntered.add(1);
       else
-        data_entered.add(0);
+        dataEntered.add(0);
     }
 
-    data_entered.add(selectedTemperature == Temperature.fever ? 1 : 0);
+    dataEntered.add(selectedTemperature == Temperature.fever ? 1 : 0);
 
-    data_entered.add(selectedTemperature == Temperature.high_fever ? 1 : 0);
+    dataEntered.add(selectedTemperature == Temperature.high_fever ? 1 : 0);
 
-    print(data_entered);
+    print(dataEntered);
 
     print('Major Symptoms');
     for (int i = 0; i < majorSymptom.length; i++) {

@@ -58,6 +58,7 @@ SymptomsProgressed selectedForSymptoms = SymptomsProgressed.no;
 
 class COVIDanalyser extends StatefulWidget {
   const COVIDanalyser({key}) : super(key: key);
+  static const String id = "covid_analyser";
 
   @override
   _COVIDanalyserState createState() => _COVIDanalyserState();

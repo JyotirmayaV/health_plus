@@ -8,6 +8,7 @@ import 'dart:async';
 
 class StepsCounter extends StatefulWidget {
   const StepsCounter({key}) : super(key: key);
+  static const String id = "steps_counter";
 
   @override
   _StepsCounterState createState() => _StepsCounterState();

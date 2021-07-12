@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class HomeScreen extends StatelessWidget {
+  static const String id = "home_screen";
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context)

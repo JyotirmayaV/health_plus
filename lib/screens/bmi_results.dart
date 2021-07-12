@@ -1,4 +1,3 @@
-import 'package:Health_Plus/functionalities/bmi_calculator/bmi_brain.dart';
 import 'package:Health_Plus/widgets/bmi_calculator/reusable_card.dart';
 import 'package:Health_Plus/constants.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ class BMIResults extends StatelessWidget {
   final String bmiResult;
   final String bmi;
   final String bmiAdvice;
+  static const String id = "bmi_results";
 
   BMIResults(
       {@required this.bmiResult, @required this.bmi, @required this.bmiAdvice});

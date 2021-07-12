@@ -24,6 +24,7 @@ Gender selectedGender = Gender.male;
 
 class BMICalculator extends StatefulWidget {
   const BMICalculator({key}) : super(key: key);
+  static const String id = "bmi";
 
   @override
   _BMICalculator createState() => _BMICalculator();

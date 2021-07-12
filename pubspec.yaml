@@ -29,6 +29,7 @@ dependencies:
   http: ^0.13.3
   percent_indicator: ^3.0.1
   pedometer: ^3.0.0
+  animated_text_kit: ^4.2.1
 
 dev_dependencies:
   flutter_test:
