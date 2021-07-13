@@ -11,11 +11,11 @@ class ReusableCardChild extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Icon(
           childContainerIcon,
-          size: 80.0,
+          size: 60.0,
         ),
         SizedBox(
           height: 15.0,

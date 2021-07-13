@@ -1,20 +1,66 @@
+import 'package:Health_Plus/constants.dart';
 import 'package:Health_Plus/screens/bmi.dart';
 import 'package:Health_Plus/screens/covid_analyser.dart';
 import 'package:Health_Plus/screens/details_screen.dart';
 import 'package:Health_Plus/screens/steps_counter.dart';
+import 'package:Health_Plus/screens/welcome_screen.dart';
 import 'package:Health_Plus/widgets/bottom_nav_bar.dart';
 import 'package:Health_Plus/widgets/category_card.dart';
 import 'package:Health_Plus/widgets/search_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const String id = "home_screen";
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+
+  User loggedInUser;
+
+  String name = "Dear User";
+
+  Future<void> getUser() async {
+    try {
+      print("in home screen");
+      final user = await _auth.currentUser;
+      print("user $user");
+      if (user != null) {
+        loggedInUser = user;
+        print("logged in user details $loggedInUser");
+        var data =
+            await _firestore.collection('users').doc(loggedInUser.email).get();
+        setState(() {
+          name = data['name'];
+        });
+        print("data ");
+        print(data);
+      }
+    } catch (e) {
+      print("in exception");
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    print("i came here");
+    getUser();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context)
         .size; //this gonna give us total height and with of our device
+    ;
     return Scaffold(
       bottomNavigationBar: BottomNavBar(),
       body: Stack(
@@ -36,21 +82,35 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 52,
-                      width: 52,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF2BEA1),
-                        shape: BoxShape.circle,
+                  GestureDetector(
+                    onTap: () {
+                      _auth.signOut();
+                      //remove screen from back as well
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WelcomeScreen()),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 52,
+                        width: 52,
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade200,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.logout,
+                        ),
                       ),
-                      child: SvgPicture.asset("assets/icons/menu.svg"),
                     ),
                   ),
                   Text(
-                    "Good Morning \nAchint",
+                    "Welcome $name",
 
                     style: TextStyle(fontWeight: FontWeight.w900, fontSize: 30),
                     //style: Theme.of(context)
