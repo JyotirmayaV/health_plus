@@ -1,5 +1,6 @@
 import 'package:Health_Plus/constants.dart';
 import 'package:Health_Plus/screens/bmi.dart';
+import 'package:Health_Plus/screens/chat_screen.dart';
 import 'package:Health_Plus/screens/covid_analyser.dart';
 import 'package:Health_Plus/screens/details_screen.dart';
 import 'package:Health_Plus/screens/steps_counter.dart';
@@ -185,6 +186,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               context,
                               MaterialPageRoute(builder: (context) {
                                 return StepsCounter();
+                              }),
+                            );
+                          },
+                        ),
+                        CategoryCard(
+                          title: "Community Support",
+                          svgSrc: "assets/icons/yoga.svg",
+                          press: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return ChatScreen();
                               }),
                             );
                           },

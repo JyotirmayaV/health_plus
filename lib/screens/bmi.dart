@@ -58,7 +58,7 @@ class _BMICalculator extends State<BMICalculator> {
         detailsFilled = data['detailsFilled'];
         if (detailsFilled == false) {
           setState(() {
-            btnText = "REGSITER ME";
+            btnText = "REGISTER ME";
             appBarName = "Register";
           });
         } else {

@@ -91,7 +91,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     setState(() {
                       showSpinner = true;
                     });
-                    print("clicked on regsiter");
+                    print("clicked on register");
                     final newUser = await _auth.createUserWithEmailAndPassword(
                       email: email,
                       password: password,
