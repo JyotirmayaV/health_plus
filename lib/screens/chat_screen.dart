@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:Health_Plus/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/painting.dart';
 
 final _firestore = FirebaseFirestore.instance;
 User loggedInUser;
 List<String> emails = [];
+Map<String, String> experts = {
+  'expert@gmail.com': 'expert',
+};
 
 class ChatScreen extends StatefulWidget {
   static const String id = 'chat_screen';
@@ -31,11 +35,16 @@ class _ChatScreenState extends State<ChatScreen> {
       final user = await _auth.currentUser;
       if (user != null) {
         loggedInUser = user;
-        var data = await _firestore.collection('admins').get();
-        for (var i in data.docs) {
+        var adminData = await _firestore.collection('admins').get();
+        for (var i in adminData.docs) {
           var singleDoc = i.data();
           emails.add(singleDoc['email']);
-          print(emails);
+          //print(emails);
+        }
+        var expertData = await _firestore.collection('experts').get();
+        for (var expert in expertData.docs) {
+          experts[expert['email']] = expert['name'];
+          //print(experts);
         }
       }
     } catch (e) {
@@ -72,9 +81,12 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   FlatButton(
-                    onPressed: () {
+                    onPressed: () async {
                       messageTextController.clear();
-                      _firestore.collection('messages').add({
+                      await _firestore
+                          .collection('messages')
+                          .doc('${DateTime.now().microsecondsSinceEpoch}')
+                          .set({
                         'text': messageText,
                         'sender': loggedInUser.email,
                       });
@@ -145,6 +157,9 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool foundExpert = experts.containsKey(sender);
+    //print("$sender is expert : $foundExpert");
+
     return Padding(
       padding: EdgeInsets.all(10.0),
       child: Column(
@@ -152,12 +167,15 @@ class MessageBubble extends StatelessWidget {
             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
           Visibility(
-            visible: emails.contains(loggedInUser.email),
+            visible: emails.contains(loggedInUser.email) || foundExpert,
             child: Text(
-              sender,
+              experts.containsKey(sender)
+                  ? "Expert ${experts[sender]}"
+                  : sender,
               style: TextStyle(
                 fontSize: 12.0,
                 color: Colors.black54,
+                fontWeight: foundExpert ? FontWeight.bold : FontWeight.normal,
               ),
             ),
           ),
@@ -173,13 +191,17 @@ class MessageBubble extends StatelessWidget {
                     topRight: Radius.circular(30.0),
                   ),
             elevation: 5.0,
-            color: isMe ? Colors.lightBlueAccent : Colors.white,
+            color: isMe
+                ? Colors.lightBlue
+                : foundExpert
+                    ? Colors.green
+                    : Colors.white,
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               child: Text(
                 text,
                 style: TextStyle(
-                  color: isMe ? Colors.white : Colors.black54,
+                  color: isMe || foundExpert ? Colors.white : Colors.black54,
                   fontSize: 15.0,
                 ),
               ),

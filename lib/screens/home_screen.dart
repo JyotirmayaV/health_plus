@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ),
                         CategoryCard(
-                          title: "Community Support",
+                          title: "Community",
                           svgSrc: "assets/icons/yoga.svg",
                           press: () {
                             Navigator.push(
