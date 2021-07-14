@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:Health_Plus/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 final _firestore = FirebaseFirestore.instance;
 User loggedInUser;
+List<String> emails = [];
 
 class ChatScreen extends StatefulWidget {
   static const String id = 'chat_screen';
@@ -30,6 +33,12 @@ class _ChatScreenState extends State<ChatScreen> {
       final user = await _auth.currentUser;
       if (user != null) {
         loggedInUser = user;
+        var data = await _firestore.collection('admins').get();
+        for (var i in data.docs) {
+          var singleDoc = i.data();
+          emails.add(singleDoc['email']);
+          print(emails);
+        }
       }
     } catch (e) {
       print(e);
@@ -144,13 +153,15 @@ class MessageBubble extends StatelessWidget {
         crossAxisAlignment:
             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            sender,
-            style: TextStyle(
-              fontSize: 12.0,
-              color: Colors.black54,
-            ),
-          ),
+          emails.contains(sender)
+              ? Text(
+                  sender,
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    color: Colors.black54,
+                  ),
+                )
+              : null,
           Material(
             borderRadius: isMe
                 ? BorderRadius.only(
