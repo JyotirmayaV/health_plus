@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:Health_Plus/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -109,7 +107,7 @@ class MessagesStream extends StatelessWidget {
             ),
           );
         }
-        final messages = snapshot.data.docs;
+        final messages = snapshot.data.docs.reversed;
         List<MessageBubble> messageBubbles = [];
         for (var message in messages) {
           final msg = message.data() as Map<String, dynamic>;
@@ -153,15 +151,16 @@ class MessageBubble extends StatelessWidget {
         crossAxisAlignment:
             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
-          emails.contains(sender)
-              ? Text(
-                  sender,
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: Colors.black54,
-                  ),
-                )
-              : null,
+          Visibility(
+            visible: emails.contains(loggedInUser.email),
+            child: Text(
+              sender,
+              style: TextStyle(
+                fontSize: 12.0,
+                color: Colors.black54,
+              ),
+            ),
+          ),
           Material(
             borderRadius: isMe
                 ? BorderRadius.only(
