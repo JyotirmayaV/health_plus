@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 List<int> dataEntered = [];
 
 class COVIDanalyserBrain {
+  String _ans = "";
+
   final Map<String, bool> majorSymptom;
   final Map<String, bool> majorDisease;
   final Gender selectedGender;
@@ -23,7 +25,7 @@ class COVIDanalyserBrain {
     @required this.age,
   });
 
-  void selected() async {
+  Future<void> selected() async {
     dataEntered = [];
 
     dataEntered.add(selectedGender == Gender.male ? 0 : 1);
@@ -94,13 +96,14 @@ class COVIDanalyserBrain {
     await getData();
   } //closing of selected function
 
-  void getData() async {
+  Future<void> getData() async {
     print("entered");
     var response = await http.get(
       Uri.http(
-        '192.168.43.250',
-        '/cgi-bin/t1.py',
+        '192.168.43.254',
+        '/cgi-bin/detector.py',
         {
+          //'data': '23',
           'a': '${dataEntered[0]}',
           'b': '${dataEntered[1]}',
           'c': '${dataEntered[2]}',
@@ -135,5 +138,11 @@ class COVIDanalyserBrain {
     print(response);
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
+    _ans = response.body;
+  }
+
+  String getAns() {
+    print("answer is $_ans");
+    return _ans;
   }
 }
