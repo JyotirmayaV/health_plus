@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class MyToast {
+class toast_diet {
   static void showMyToast({String message}) {
     Fluttertoast.showToast(
         msg: message,

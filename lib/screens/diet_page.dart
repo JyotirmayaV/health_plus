@@ -1,4 +1,5 @@
 import 'package:Health_Plus/functionalities/toast.dart';
+import 'package:Health_Plus/functionalities/toast_diet.dart';
 import 'package:Health_Plus/screens/result_page_2.dart';
 import 'package:flutter/material.dart';
 
@@ -212,10 +213,10 @@ class myapp extends StatelessWidget {
                         onPressed: () {
                           print("Pressed");
                           total_calories += cal_breakfast[index];
-                          print("You have entered $total_calories calories");
-                          MyToast.showMyToast(
+                          print("You have gained $total_calories calories");
+                          toast_diet.showMyToast(
                               message:
-                                  "You have entered $total_calories calories");
+                                  "You have gained $total_calories calories");
                         },
                         child: Icon(
                           Icons.add,
@@ -244,9 +245,9 @@ class myapp extends StatelessWidget {
                           print("Pressed");
                           total_calories += cal_lunch[index];
                           print("You have entered $total_calories calories");
-                          MyToast.showMyToast(
+                          toast_diet.showMyToast(
                               message:
-                                  "You have entered $total_calories calories");
+                                  "You have gained $total_calories calories");
                         },
                         child: Icon(
                           Icons.add,
@@ -275,9 +276,9 @@ class myapp extends StatelessWidget {
                           print("Pressed");
                           total_calories += cal_evening[index];
                           print("You have entered $total_calories calories");
-                          MyToast.showMyToast(
+                          toast_diet.showMyToast(
                               message:
-                                  "You have entered $total_calories calories");
+                                  "You have gained $total_calories calories");
                         },
                         child: Icon(
                           Icons.add,
