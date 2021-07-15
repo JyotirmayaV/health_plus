@@ -159,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisSpacing: 20,
                       children: <Widget>[
                         CategoryCard(
-                          title: "Diet Recommendation",
+                          title: "Calorie Counter",
                           svgSrc: "assets/icons/Hamburger.svg",
                           press: () {
                             Navigator.pushNamed(context, 'welcome_diet');
