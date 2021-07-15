@@ -2,8 +2,8 @@
     package="com.jyoachman.health_plus">
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
    <application
-        android:label="health_plus"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Health App"
+        android:icon="@mipmap/ic_launcher_h">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

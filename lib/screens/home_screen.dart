@@ -166,6 +166,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ),
                         CategoryCard(
+                          title: "Steps Counter",
+                          svgSrc: "assets/icons/yoga.svg",
+                          press: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return StepsCounter();
+                              }),
+                            );
+                          },
+                        ),
+                        CategoryCard(
                           title: "Workout",
                           svgSrc: "assets/icons/Exercises.svg",
                           press: () async {
@@ -214,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         // ),
                         CategoryCard(
                           title: "COVID Analyser",
-                          svgSrc: "assets/icons/yoga.svg",
+                          svgSrc: "assets/icons/covid.svg",
                           press: () {
                             Navigator.push(
                               context,
@@ -224,18 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                         ),
-                        CategoryCard(
-                          title: "Steps Counter",
-                          svgSrc: "assets/icons/yoga.svg",
-                          press: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) {
-                                return StepsCounter();
-                              }),
-                            );
-                          },
-                        ),
+
                         CategoryCard(
                           title: "Community",
                           svgSrc: "assets/icons/yoga.svg",

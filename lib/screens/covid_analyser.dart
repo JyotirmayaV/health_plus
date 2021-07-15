@@ -4,6 +4,7 @@ import 'package:Health_Plus/widgets/bmi_calculator/icon_content.dart';
 import 'package:Health_Plus/widgets/bmi_calculator/reusable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 const Color activeCardColor = kBmiActiveIconColor;
 const Color inactiveCardColor = kBmiBackgroundColor;
@@ -346,6 +347,22 @@ class _COVIDanalyserState extends State<COVIDanalyser> {
                 );
 
                 ob.selected();
+
+                Alert(
+                  context: context,
+                  title: "Covid tip",
+                  desc: "Your score is 50",
+                  buttons: [
+                    DialogButton(
+                      child: Text(
+                        "Okay..",
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      width: 120,
+                    )
+                  ],
+                ).show();
               });
             },
             child: Container(

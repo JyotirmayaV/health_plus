@@ -23,7 +23,7 @@ class COVIDanalyserBrain {
     @required this.age,
   });
 
-  void selected() {
+  void selected() async {
     dataEntered = [];
 
     dataEntered.add(selectedGender == Gender.male ? 0 : 1);
@@ -91,18 +91,49 @@ class COVIDanalyserBrain {
     print('Symptoms : $selectedSymptoms');
     print('History : $selectedHistory');
 
-    //getData();
+    await getData();
   } //closing of selected function
 
   void getData() async {
     print("entered");
     var response = await http.get(
       Uri.http(
-        '10.0.12.94',
-        '/cgi-bin/detector.py',
-        {'data': '123'},
+        '192.168.43.250',
+        '/cgi-bin/t1.py',
+        {
+          'a': '${dataEntered[0]}',
+          'b': '${dataEntered[1]}',
+          'c': '${dataEntered[2]}',
+          'd': '${dataEntered[3]}',
+          'e': '${dataEntered[4]}',
+          'f': '${dataEntered[5]}',
+          'g': '${dataEntered[6]}',
+          'h': '${dataEntered[7]}',
+          'i': '${dataEntered[8]}',
+          'j': '${dataEntered[9]}',
+          'k': '${dataEntered[10]}',
+          'l': '${dataEntered[11]}',
+          'm': '${dataEntered[12]}',
+          'n': '${dataEntered[13]}',
+          'o': '${dataEntered[14]}',
+          'p': '${dataEntered[15]}',
+          'q': '${dataEntered[16]}',
+          'r': '${dataEntered[17]}',
+          's': '${dataEntered[18]}',
+          't': '${dataEntered[19]}',
+          'u': '${dataEntered[20]}',
+          'v': '${dataEntered[21]}',
+          'w': '${dataEntered[22]}',
+          'x': '${dataEntered[23]}',
+          'y': '${dataEntered[24]}',
+          'z': '${dataEntered[25]}',
+          'aa': '${dataEntered[26]}',
+          'ab': '${dataEntered[27]}',
+        },
       ),
     );
     print(response);
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
   }
 }
