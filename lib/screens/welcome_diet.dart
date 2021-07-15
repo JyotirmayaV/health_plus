@@ -33,7 +33,7 @@ class _welcome_dietState extends State<welcome_diet> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Welcome To Diet"),
+        title: Text("Calorie Input"),
         backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
