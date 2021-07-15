@@ -1,3 +1,4 @@
+import 'package:Health_Plus/functionalities/toast.dart';
 import 'package:Health_Plus/main.dart';
 import 'package:Health_Plus/screens/home_screen.dart';
 import 'package:Health_Plus/screens/login_screen.dart';
@@ -20,6 +21,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Future<void> checkLoggedInStatus() async {
     //prefs = await SharedPreferences.getInstance();
     print("here1");
+    var x = prefs.containsKey('loggedInStatus');
+    print(x);
+    MyToast.showMyToast(message: x.toString());
     bool loggedInStatus = prefs.getBool('loggedInStatus') ?? false;
     print("here2");
     print("loggedInStatus : $loggedInStatus");
