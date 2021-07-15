@@ -161,7 +161,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         CategoryCard(
                           title: "Diet Recommendation",
                           svgSrc: "assets/icons/Hamburger.svg",
-                          press: () {},
+                          press: () {
+                            Navigator.pushNamed(context, 'welcome_diet');
+                          },
                         ),
                         CategoryCard(
                           title: "Workout",

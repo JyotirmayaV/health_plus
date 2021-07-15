@@ -3,11 +3,14 @@ import 'package:Health_Plus/screens/bmi.dart';
 import 'package:Health_Plus/screens/chat_screen.dart';
 import 'package:Health_Plus/screens/covid_analyser.dart';
 import 'package:Health_Plus/screens/details_screen.dart';
+import 'package:Health_Plus/screens/diet_page.dart';
 import 'package:Health_Plus/screens/home_screen.dart';
 import 'package:Health_Plus/screens/login_screen.dart';
 import 'package:Health_Plus/screens/registration_screen.dart';
+import 'package:Health_Plus/screens/result_page_2.dart';
 import 'package:Health_Plus/screens/splash_screen.dart';
 import 'package:Health_Plus/screens/steps_counter.dart';
+import 'package:Health_Plus/screens/welcome_diet.dart';
 import 'package:Health_Plus/screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +50,12 @@ class MyApp extends StatelessWidget {
         DetailsScreen.id: (context) => DetailsScreen(),
         COVIDanalyser.id: (context) => COVIDanalyser(),
         BMICalculator.id: (context) => BMICalculator(),
+        'welcome_diet': (context) => welcome_diet(),
+        myapp.id: (context) => myapp(
+              calorie_txt: '',
+            ),
+        CalorieResults.id: (context) =>
+            CalorieResults(calorie_count: '', bmiAdvice: ''),
       },
     );
   }
