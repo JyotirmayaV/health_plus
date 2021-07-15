@@ -25,6 +25,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
+    print("i am here");
     super.initState();
 
     getCurrentUser();
@@ -44,7 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
         var expertData = await _firestore.collection('experts').get();
         for (var expert in expertData.docs) {
           experts[expert['email']] = expert['name'];
-          //print(experts);
+          print(experts);
         }
       }
     } catch (e) {
@@ -55,6 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kBackgroundColor,
       appBar: AppBar(
         leading: null,
         title: Text('HealthPlus Community'),
@@ -67,7 +69,8 @@ class _ChatScreenState extends State<ChatScreen> {
           children: <Widget>[
             MessagesStream(),
             Container(
-              decoration: kMessageContainerDecoration,
+              //decoration: kMessageContainerDecoration,
+              color: Colors.black12,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -93,7 +96,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     },
                     child: Text(
                       'Send',
-                      style: kSendButtonTextStyle,
+                      style: kSendButtonTextStyle.copyWith(
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ],

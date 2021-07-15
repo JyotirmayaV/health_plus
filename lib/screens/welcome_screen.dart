@@ -1,9 +1,11 @@
+import 'package:Health_Plus/main.dart';
+import 'package:Health_Plus/screens/home_screen.dart';
 import 'package:Health_Plus/screens/login_screen.dart';
 import 'package:Health_Plus/screens/registration_screen.dart';
 import 'package:Health_Plus/widgets/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import '';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = "welcome_screen";
@@ -13,6 +15,47 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  //SharedPreferences prefs;
+
+  Future<void> checkLoggedInStatus() async {
+    //prefs = await SharedPreferences.getInstance();
+    print("here1");
+    bool loggedInStatus = prefs.getBool('loggedInStatus') ?? false;
+    print("here2");
+    print("loggedInStatus : $loggedInStatus");
+    if (loggedInStatus == true) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+        (Route<dynamic> route) => false,
+      );
+    } else {
+      await SharedPreferences.setMockInitialValues(<String, dynamic>{
+        "loggedInStatus": false,
+        "detailsFilled": false,
+        "nameFetched": false,
+      });
+      bool detailsFilled = (prefs.getBool('detailsFilled') ?? false);
+      bool nameFetched = (prefs.getBool('nameFetched') ?? false);
+      bool loggedInStatus = (prefs.getBool('loggedInStatus') ?? false);
+      print(
+          "detailsFilled : $detailsFilled, nameFetched : $nameFetched, loggedInStatus $loggedInStatus");
+    }
+  }
+
+  void setSharedPreference() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    print("I came here in welcome screen");
+    setSharedPreference();
+    checkLoggedInStatus();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

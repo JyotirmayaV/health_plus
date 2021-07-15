@@ -1,17 +1,19 @@
-import 'package:Health_Plus/constants.dart';
+//import 'package:Health_Plus/constants.dart';
+import 'package:Health_Plus/main.dart';
 import 'package:Health_Plus/screens/bmi.dart';
 import 'package:Health_Plus/screens/chat_screen.dart';
 import 'package:Health_Plus/screens/covid_analyser.dart';
 import 'package:Health_Plus/screens/details_screen.dart';
 import 'package:Health_Plus/screens/steps_counter.dart';
 import 'package:Health_Plus/screens/welcome_screen.dart';
-import 'package:Health_Plus/widgets/bottom_nav_bar.dart';
+//import 'package:Health_Plus/widgets/bottom_nav_bar.dart';
 import 'package:Health_Plus/widgets/category_card.dart';
-import 'package:Health_Plus/widgets/search_bar.dart';
+//import 'package:Health_Plus/widgets/search_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+//import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = "home_screen";
@@ -24,102 +26,130 @@ class _HomeScreenState extends State<HomeScreen> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
 
-  User loggedInUser;
+  //SharedPreferences prefs;
 
-  String name = "Dear User";
+  String email = "";
+  String name = "Welcome";
+
+  Future<void> checkLoggedInStatus() async {
+    //await setSharedPreference();
+
+    //prefs = await SharedPreferences.getInstance();
+    bool loggedInStatus = (prefs.getBool('loggedInStatus') ?? false);
+    bool detailsFilled = (prefs.getBool('detailsFilled') ?? false);
+    bool nameFetched = (prefs.getBool('nameFetched') ?? false);
+    email = (prefs.getString('email'));
+
+    print("detailsFilled : $detailsFilled, loggedInStatus : $loggedInStatus");
+
+    var data = await _firestore.collection("users").doc(email).get();
+    if (data['detailsFilled'] && detailsFilled == false) {
+      detailsFilled = true;
+      await prefs.setBool('detailsFilled', true);
+    }
+
+    if (detailsFilled == false) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => BMICalculator()),
+        (Route<dynamic> route) => false,
+      );
+      print("detailsFilled : $detailsFilled, loggedInStatus : $loggedInStatus");
+    } else if (nameFetched == true) {
+      setState(() {
+        name = prefs.getString('name');
+      });
+      print("name was found - $name");
+    } else {
+      print("name was not found");
+      await getUser();
+    }
+  }
 
   Future<void> getUser() async {
     try {
       print("in home screen");
-      final user = await _auth.currentUser;
-      print("user $user");
-      if (user != null) {
-        loggedInUser = user;
-        print("logged in user details $loggedInUser");
-        var data =
-            await _firestore.collection('users').doc(loggedInUser.email).get();
-        setState(() {
-          name = data['name'];
-        });
-        print("data ");
-        print(data);
-      }
+      // final user = await _auth.currentUser;
+      // print("user $user");
+      // if (user != null) {
+      //  User loggedInUser = user;
+      //  print("logged in user details $loggedInUser");
+      var data = await _firestore.collection('users').doc(email).get();
+
+      setState(() {
+        name = data['name'];
+      });
+
+      await prefs.setString('name', name);
+      await prefs.setBool('nameFetched', true);
+
+      //print("data ");
+      //print(data);
     } catch (e) {
       print("in exception");
       print(e);
     }
   }
 
+  void setSharedPreference() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
   @override
   void initState() {
-    print("i came here");
-    getUser();
+    print("i came here in home screen");
+    checkLoggedInStatus();
+    //getUser();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context)
-        .size; //this gonna give us total height and with of our device
-    ;
-    return Scaffold(
-      bottomNavigationBar: BottomNavBar(),
-      body: Stack(
-        children: <Widget>[
-          Container(
-            // Here the height of the container is 45% of our total height
-            height: size.height * .45,
-            decoration: BoxDecoration(
-              color: Color(0x0059b3),
-              image: DecorationImage(
-                alignment: Alignment.centerLeft,
-                image: AssetImage("assets/images/undraw_pilates_gpdb.png"),
-              ),
+    //var size = MediaQuery.of(context).size;
+    // this gonna give us total height and with of our device
+
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "${name.split(" ").first}",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: 'SourceSansPro',
             ),
           ),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+          actions: [
+            GestureDetector(
+              onTap: () async {
+                _auth.signOut();
+                //remove screen from back as well
+                await prefs.setBool('loggedInStatus', false);
+                await prefs.setBool('nameFetched', false);
+                await prefs.setBool('detailsFilled', false);
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                  (Route<dynamic> route) => false,
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                  size: 30.0,
+                ),
+              ),
+            ),
+          ],
+        ),
+        body: Stack(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      _auth.signOut();
-                      //remove screen from back as well
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => WelcomeScreen()),
-                        (Route<dynamic> route) => false,
-                      );
-                    },
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 52,
-                        width: 52,
-                        decoration: BoxDecoration(
-                          color: Colors.red.shade200,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.logout,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Text(
-                    "Welcome $name",
-
-                    style: TextStyle(fontWeight: FontWeight.w900, fontSize: 30),
-                    //style: Theme.of(context)
-                    //  .textTheme
-                    //.display1
-                    //.copyWith(fontWeight: FontWeight.w900),
-                  ),
-                  SearchBar(),
                   Expanded(
                     child: GridView.count(
                       crossAxisCount: 2,
@@ -134,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         CategoryCard(
                           title: "Stretching",
-                          svgSrc: "assets/icons/Excrecises.svg",
+                          svgSrc: "assets/icons/Exercises.svg",
                           press: () {},
                         ),
                         CategoryCard(
@@ -151,12 +181,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         CategoryCard(
                           title: "Yoga",
-                          svgSrc: "assets/icons/yoga.svg",
+                          svgSrc: "assets/icons/Meditation.svg",
                           press: () {},
                         ),
                         CategoryCard(
-                          title: "BMI Calculator",
-                          svgSrc: "assets/icons/yoga.svg",
+                          title: "BMI Calci",
+                          svgSrc: "assets/icons/Meditation.svg",
                           press: () {
                             Navigator.push(
                               context,
@@ -207,9 +237,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

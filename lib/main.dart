@@ -6,16 +6,19 @@ import 'package:Health_Plus/screens/details_screen.dart';
 import 'package:Health_Plus/screens/home_screen.dart';
 import 'package:Health_Plus/screens/login_screen.dart';
 import 'package:Health_Plus/screens/registration_screen.dart';
+import 'package:Health_Plus/screens/splash_screen.dart';
 import 'package:Health_Plus/screens/steps_counter.dart';
 import 'package:Health_Plus/screens/welcome_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+SharedPreferences prefs;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  prefs = await SharedPreferences.getInstance();
   runApp(MyApp());
 }
 
@@ -32,8 +35,9 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: kBackgroundColor,
         textTheme: Theme.of(context).textTheme.apply(displayColor: kTextColor),
       ),
-      initialRoute: WelcomeScreen.id,
+      initialRoute: MySplash.id,
       routes: {
+        MySplash.id: (context) => MySplash(),
         WelcomeScreen.id: (context) => WelcomeScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),

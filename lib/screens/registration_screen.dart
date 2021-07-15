@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = "registration_screen";
@@ -19,6 +20,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String email;
   String password;
   bool showSpinner = false;
+  SharedPreferences prefs;
+
+  void setSharedPreference() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    setSharedPreference();
+    super.initState();
+  }
 
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
@@ -102,6 +115,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         'name': name,
                         'detailsFilled': false,
                       });
+                      await prefs.setBool('loggedInStatus', true);
+                      await prefs.setString('email', email);
+                      await prefs.setBool('nameFetched', true);
+                      await prefs.setString('name', name);
                       setState(() {
                         showSpinner = false;
                       });

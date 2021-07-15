@@ -1,13 +1,15 @@
 import 'package:Health_Plus/functionalities/bmi_calculator/bmi_brain.dart';
 import 'package:Health_Plus/functionalities/toast.dart';
+import 'package:Health_Plus/main.dart';
 import 'package:Health_Plus/screens/bmi_results.dart';
 import 'package:Health_Plus/screens/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/bmi_calculator/icon_content.dart';
 import '../widgets/bmi_calculator/reusable_card.dart';
 import 'package:Health_Plus/constants.dart';
@@ -28,8 +30,8 @@ int weight = 50;
 Gender selectedGender = Gender.male;
 bool detailsFilled = true;
 String btnText = "CALCULATE";
-User loggedInUser;
 String name;
+String email;
 String appBarName = "BMI Calculator";
 
 class BMICalculator extends StatefulWidget {
@@ -40,36 +42,48 @@ class BMICalculator extends StatefulWidget {
 }
 
 class _BMICalculator extends State<BMICalculator> {
-  final _auth = FirebaseAuth.instance;
+  //final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   bool showSpinner = false;
+  //SharedPreferences prefs;
 
   Future<void> getUser() async {
     try {
-      print("getting user");
-      final user = await _auth.currentUser;
-      if (user != null) {
-        loggedInUser = user;
-        print("loggegin user is also known as $loggedInUser");
-        var data =
-            await _firestore.collection('users').doc(loggedInUser.email).get();
-        var x = data.data();
-        print("dara is $x");
-        detailsFilled = data['detailsFilled'];
-        if (detailsFilled == false) {
-          setState(() {
-            btnText = "REGISTER ME";
-            appBarName = "Register";
-          });
-        } else {
-          setState(() {
-            btnText = "CALCULATE";
-            appBarName = "BMI Calculator";
-          });
-        }
-        name = data['name'];
-        print("my details : $detailsFilled");
+      //prefs = await SharedPreferences.getInstance();
+      detailsFilled = (prefs.getBool('detailsFilled') ?? false);
+
+      // print("getting user");
+      //
+      // final user = await _auth.currentUser;
+      //
+      // if (user != null) {
+      //
+      //   User loggedInUser = user;
+      //   email = loggedInUser.email;
+      //
+      //   print("log in user is also known as $loggedInUser");
+      //
+      //   var data =
+      //       await _firestore.collection('users').doc(email).get();
+      //
+      //   var x = data.data();
+      //   print("dara is $x");
+      //
+      //   detailsFilled = data['detailsFilled'];
+
+      if (detailsFilled == false) {
+        setState(() {
+          btnText = "REGISTER ME";
+          appBarName = "Register";
+        });
+      } else {
+        setState(() {
+          btnText = "CALCULATE";
+          appBarName = "BMI Calculator";
+        });
       }
+      //name = data['name'];
+      print("my details : $detailsFilled");
     } catch (e) {
       print(e);
     }
@@ -77,9 +91,9 @@ class _BMICalculator extends State<BMICalculator> {
 
   Future<void> addData() async {
     try {
-      print("addig dsata");
+      print("adding data");
       if (detailsFilled == false) {
-        await _firestore.collection('users').doc(loggedInUser.email).set({
+        await _firestore.collection('users').doc(email).set({
           'age': age,
           'weight': weight,
           'height': height,
@@ -95,10 +109,14 @@ class _BMICalculator extends State<BMICalculator> {
     }
   }
 
+  void setSharedPreference() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
   @override
   void initState() {
-    print("i came here");
-
+    print("i came here in BMI");
+    //setSharedPreference();
     getUser();
     super.initState();
   }
@@ -310,6 +328,7 @@ class _BMICalculator extends State<BMICalculator> {
                         showSpinner = true;
                       });
                       await addData();
+                      await prefs.setBool('detailsFilled', true);
                       setState(() {
                         showSpinner = false;
                       });
