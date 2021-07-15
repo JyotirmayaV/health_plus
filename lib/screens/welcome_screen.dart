@@ -51,7 +51,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   void initState() {
     // TODO: implement initState
     print("I came here in welcome screen");
-    setSharedPreference();
+    //setSharedPreference();
     checkLoggedInStatus();
     super.initState();
   }

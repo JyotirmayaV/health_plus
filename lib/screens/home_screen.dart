@@ -6,6 +6,7 @@ import 'package:Health_Plus/screens/covid_analyser.dart';
 import 'package:Health_Plus/screens/details_screen.dart';
 import 'package:Health_Plus/screens/steps_counter.dart';
 import 'package:Health_Plus/screens/welcome_screen.dart';
+import 'package:Health_Plus/screens/youtube_player.dart';
 //import 'package:Health_Plus/widgets/bottom_nav_bar.dart';
 import 'package:Health_Plus/widgets/category_card.dart';
 //import 'package:Health_Plus/widgets/search_bar.dart';
@@ -163,39 +164,52 @@ class _HomeScreenState extends State<HomeScreen> {
                           press: () {},
                         ),
                         CategoryCard(
-                          title: "Stretching",
+                          title: "Workout",
                           svgSrc: "assets/icons/Exercises.svg",
-                          press: () {},
+                          press: () async {
+                            await prefs.setString('videos', "Workout");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return YoutubePlayerDemoApp(
+                                  currentsState: 'Workout',
+                                );
+                              }),
+                            );
+                          },
                         ),
                         CategoryCard(
                           title: "Meditation",
                           svgSrc: "assets/icons/Meditation.svg",
-                          press: () {
+                          press: () async {
+                            await prefs.setString('videos', "Meditation");
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) {
-                                return DetailsScreen();
+                                return YoutubePlayerDemoApp(
+                                  currentsState: 'Meditation',
+                                );
                               }),
                             );
                           },
                         ),
-                        CategoryCard(
-                          title: "Yoga",
-                          svgSrc: "assets/icons/Meditation.svg",
-                          press: () {},
-                        ),
-                        CategoryCard(
-                          title: "BMI Calci",
-                          svgSrc: "assets/icons/Meditation.svg",
-                          press: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) {
-                                return BMICalculator();
-                              }),
-                            );
-                          },
-                        ),
+                        // CategoryCard(
+                        //   title: "Yoga",
+                        //   svgSrc: "assets/icons/Meditation.svg",
+                        //   press: () {},
+                        // ),
+                        // CategoryCard(
+                        //   title: "BMI Calci",
+                        //   svgSrc: "assets/icons/Meditation.svg",
+                        //   press: () {
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(builder: (context) {
+                        //         return BMICalculator();
+                        //       }),
+                        //     );
+                        //   },
+                        // ),
                         CategoryCard(
                           title: "COVID Analyser",
                           svgSrc: "assets/icons/yoga.svg",
